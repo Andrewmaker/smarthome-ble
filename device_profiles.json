@@ -253,59 +253,38 @@
       ]
     },
     {
-      "device_id": "generic_light",
-      "device_name": "Умная лампа (универсальный профиль)",
-      "manufacturer": "Универсальный",
-      "category": "lighting",
-      "icon": "lamp",
-      "description": "Универсальный профиль для неподдерживаемых ламп",
-      "auto_detect": {
-        "note": "Используется когда устройство не опознано"
-      },
-      "connection": {
-        "auto_discover": true,
-        "note": "Автоматически ищет характеристики с поддержкой записи"
-      },
-      "commands": {
-        "power_on": {
-          "name": "Включить",
-          "bytes": [1],
-          "description": "Стандартная команда включения"
-        },
-        "power_off": {
-          "name": "Выключить",
-          "bytes": [0],
-          "description": "Стандартная команда выключения"
-        },
-        "set_brightness": {
-          "name": "Яркость",
-          "bytes": [2, "VALUE"],
-          "value_position": 1,
-          "description": "Установка яркости"
-        },
-        "set_color": {
-          "name": "Цвет",
-          "bytes": [3, "R", "G", "B"],
-          "value_positions": {"red": 1, "green": 2, "blue": 3},
-          "description": "Установка цвета"
-        }
-      },
-      "ui_controls": [
-        {
-          "type": "toggle",
-          "label": "Питание",
-          "command_on": "power_on",
-          "command_off": "power_off"
-        },
-        {
-          "type": "slider",
-          "label": "Яркость",
-          "command": "set_brightness",
-          "min": 0,
-          "max": 100,
-          "unit": "%"
-        }
-      ]
+  "device_id": "generic_light",
+  "device_name": "Умная лампа (универсальный профиль)",
+  "manufacturer": "Универсальный",
+  "category": "lighting",
+  "icon": "lamp",
+  "description": "Универсальный профиль для неподдерживаемых ламп",
+  "auto_detect": {
+    "note": "Используется когда устройство не опознано"
+  },
+  "connection": {
+    "auto_discover": true,
+    "note": "Автоматически ищет характеристики с поддержкой записи"
+  },
+  "commands": {
+    "power_on": {
+      "name": "Включить",
+      "bytes": [1],
+      "description": "Стандартная команда включения"
+    },
+    "power_off": {
+      "name": "Выключить",
+      "bytes": [0],
+      "description": "Стандартная команда выключения"
+    }
+  },
+  "ui_controls": [
+    {
+      "type": "toggle",
+      "label": "Питание",
+      "command_on": "power_on",
+      "command_off": "power_off"
     }
   ]
 }
+
