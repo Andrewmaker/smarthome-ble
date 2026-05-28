@@ -125,23 +125,24 @@
     },
     {
       "device_id": "relsib_wt51",
-      "device_name": "Кулинарный термометр WT51",
+      "device_name": "Кулинарный термометр WT51 RELSIB",
       "manufacturer": "RELSIB",
       "category": "sensor",
       "icon": "thermometer",
-      "description": "Профессиональный кулинарный термометр-щуп с BLE",
+      "description": "Профессиональный кулинарный термометр-щуп с Bluetooth",
       "auto_detect": {
         "service_uuids": ["0000fff0-0000-1000-8000-00805f9b34fb"],
-        "name_patterns": ["WT51", "RELSIB", "BBQ"],
+        "name_patterns": ["WT51", "RELSIB", "BBQ", "Thermometer"],
         "note": "Определяется по имени устройства и сервисному UUID"
       },
       "connection": {
         "service_uuid": "0000fff0-0000-1000-8000-00805f9b34fb",
-        "characteristic_uuid": "0000fff1-0000-1000-8000-00805f9b34fb"
+        "characteristic_uuid": "0000fff1-0000-1000-8000-00805f9b34fb",
+        "write_type": "WRITE_DEFAULT"
       },
       "sensors": {
         "temperature": {
-          "name": "Температура",
+          "name": "Температура щупа",
           "characteristic_uuid": "0000fff1-0000-1000-8000-00805f9b34fb",
           "type": "notify",
           "parser": {
@@ -152,12 +153,50 @@
           }
         }
       },
+      "commands": {
+        "start_measure": {
+          "name": "Начать измерение",
+          "bytes": [1],
+          "description": "Запускает измерение температуры"
+        },
+        "stop_measure": {
+          "name": "Остановить измерение",
+          "bytes": [0],
+          "description": "Останавливает измерение"
+        },
+        "set_unit_celsius": {
+          "name": "Градусы Цельсия",
+          "bytes": [2, 0],
+          "description": "Устанавливает отображение в °C"
+        },
+        "set_unit_fahrenheit": {
+          "name": "Градусы Фаренгейта",
+          "bytes": [2, 1],
+          "description": "Устанавливает отображение в °F"
+        }
+      },
       "ui_controls": [
         {
           "type": "display",
           "label": "Температура щупа",
           "sensor": "temperature",
           "unit": "°C"
+        },
+        {
+          "type": "toggle",
+          "label": "Измерение",
+          "command_on": "start_measure",
+          "command_off": "stop_measure"
+        },
+        {
+          "type": "button",
+          "label": "°C",
+          "command": "set_unit_celsius"
+        },
+        {
+          "type": "button",
+          "label": "°F",
+          "command": "set_unit_fahrenheit"
         }
       ]
     },
