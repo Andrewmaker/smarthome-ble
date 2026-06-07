@@ -1,7 +1,7 @@
 {
-  "version": "1.0.0",
-  "last_updated": "2026-05-28",
-  "description": "База профилей BLE-устройств для SmartHome BLE",
+  "version": "1.1.0",
+  "last_updated": "2026-06-08",
+  "description": "База профилей BLE-устройств для SmartHome BLE. Добавлена полная поддержка RELSIB WT51",
   "devices": [
     {
       "device_id": "wolta_lamp_wstd_a60",
@@ -129,7 +129,7 @@
       "manufacturer": "RELSIB",
       "category": "sensor",
       "icon": "thermometer",
-      "description": "Профессиональный кулинарный термометр-щуп с Bluetooth",
+      "description": "Профессиональный кулинарный термометр-щуп с Bluetooth. Диапазон: -40...+125°C. Точность: ±0.5°C. Питание: CR2032.",
       "auto_detect": {
         "service_uuids": ["0000fff0-0000-1000-8000-00805f9b34fb"],
         "name_patterns": ["WT51", "RELSIB", "BBQ", "Thermometer"],
@@ -150,6 +150,17 @@
             "length": 2,
             "formula": "value / 10.0",
             "unit": "°C"
+          }
+        },
+        "battery": {
+          "name": "Заряд батареи",
+          "characteristic_uuid": "00002a19-0000-1000-8000-00805f9b34fb",
+          "type": "read",
+          "parser": {
+            "offset": 0,
+            "length": 1,
+            "formula": "value",
+            "unit": "%"
           }
         }
       },
@@ -173,11 +184,49 @@
           "name": "Градусы Фаренгейта",
           "bytes": [2, 1],
           "description": "Устанавливает отображение в °F"
+        },
+        "set_upper_threshold": {
+          "name": "Верхний порог",
+          "bytes": [3, "VALUE"],
+          "value_position": 1,
+          "description": "Установка верхнего порога сигнализации (-40...+125°C)"
+        },
+        "set_lower_threshold": {
+          "name": "Нижний порог",
+          "bytes": [4, "VALUE"],
+          "value_position": 1,
+          "description": "Установка нижнего порога сигнализации (-40...+125°C)"
+        },
+        "enable_alarm": {
+          "name": "Включить сигнализацию",
+          "bytes": [5, 1],
+          "description": "Включает звуковую и вибрационную сигнализацию"
+        },
+        "disable_alarm": {
+          "name": "Выключить сигнализацию",
+          "bytes": [5, 0],
+          "description": "Выключает звуковую и вибрационную сигнализацию"
+        },
+        "reset_session": {
+          "name": "Сброс сессии",
+          "bytes": [6],
+          "description": "Сбрасывает Max/Min значения и перезапускает таймер"
+        },
+        "set_name": {
+          "name": "Установить имя",
+          "bytes": [7],
+          "description": "Установка пользовательского имени устройства"
+        },
+        "set_color_marker": {
+          "name": "Цветной маркер",
+          "bytes": [8, "VALUE"],
+          "value_position": 1,
+          "description": "Установка цвета маркера для идентификации устройства"
         }
       },
       "ui_controls": [
         {
-          "type": "display",
+          "type": "thermometer_display",
           "label": "Температура щупа",
           "sensor": "temperature",
           "unit": "°C"
@@ -190,13 +239,63 @@
         },
         {
           "type": "button",
-          "label": "°C",
+          "label": "°C / °F",
           "command": "set_unit_celsius"
         },
         {
           "type": "button",
-          "label": "°F",
-          "command": "set_unit_fahrenheit"
+          "label": "Сброс сессии",
+          "command": "reset_session"
+        },
+        {
+          "type": "slider",
+          "label": "Верхний порог",
+          "command": "set_upper_threshold",
+          "min": -40,
+          "max": 125,
+          "unit": "°C"
+        },
+        {
+          "type": "slider",
+          "label": "Нижний порог",
+          "command": "set_lower_threshold",
+          "min": -40,
+          "max": 125,
+          "unit": "°C"
+        },
+        {
+          "type": "toggle",
+          "label": "Сигнализация",
+          "command_on": "enable_alarm",
+          "command_off": "disable_alarm"
+        },
+        {
+          "type": "display",
+          "label": "Максимум",
+          "sensor": "max_temperature",
+          "unit": "°C"
+        },
+        {
+          "type": "display",
+          "label": "Минимум",
+          "sensor": "min_temperature",
+          "unit": "°C"
+        },
+        {
+          "type": "display",
+          "label": "Батарея",
+          "sensor": "battery",
+          "unit": "%"
+        },
+        {
+          "type": "timer_display",
+          "label": "Время измерения"
+        },
+        {
+          "type": "chart",
+          "label": "График температуры",
+          "sensor": "temperature",
+          "history_minutes": 30
         }
       ]
     },
@@ -253,38 +352,39 @@
       ]
     },
     {
-  "device_id": "generic_light",
-  "device_name": "Умная лампа (универсальный профиль)",
-  "manufacturer": "Универсальный",
-  "category": "lighting",
-  "icon": "lamp",
-  "description": "Универсальный профиль для неподдерживаемых ламп",
-  "auto_detect": {
-    "note": "Используется когда устройство не опознано"
-  },
-  "connection": {
-    "auto_discover": true,
-    "note": "Автоматически ищет характеристики с поддержкой записи"
-  },
-  "commands": {
-    "power_on": {
-      "name": "Включить",
-      "bytes": [1],
-      "description": "Стандартная команда включения"
-    },
-    "power_off": {
-      "name": "Выключить",
-      "bytes": [0],
-      "description": "Стандартная команда выключения"
-    }
-  },
-  "ui_controls": [
-    {
-      "type": "toggle",
-      "label": "Питание",
-      "command_on": "power_on",
-      "command_off": "power_off"
+      "device_id": "generic_light",
+      "device_name": "Умная лампа (универсальный профиль)",
+      "manufacturer": "Универсальный",
+      "category": "lighting",
+      "icon": "lamp",
+      "description": "Универсальный профиль для неподдерживаемых ламп",
+      "auto_detect": {
+        "note": "Используется когда устройство не опознано"
+      },
+      "connection": {
+        "auto_discover": true,
+        "note": "Автоматически ищет характеристики с поддержкой записи"
+      },
+      "commands": {
+        "power_on": {
+          "name": "Включить",
+          "bytes": [1],
+          "description": "Стандартная команда включения"
+        },
+        "power_off": {
+          "name": "Выключить",
+          "bytes": [0],
+          "description": "Стандартная команда выключения"
+        }
+      },
+      "ui_controls": [
+        {
+          "type": "toggle",
+          "label": "Питание",
+          "command_on": "power_on",
+          "command_off": "power_off"
+        }
+      ]
     }
   ]
 }
-
