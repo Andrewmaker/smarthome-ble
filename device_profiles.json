@@ -103,4 +103,61 @@
         "reset_session": {"name": "Сброс", "bytes": [6]}
       },
       "ui_controls": [
-        {"type": "thermometer_display", "label": "Температура щупа", "s
+        {"type": "thermometer_display", "label": "Температура щупа", "sensor": "temperature", "unit": "°C"},
+        {"type": "threshold_lines", "label": "Пороги", "unit": "°C"},
+        {"type": "timer_display", "label": "Время измерения"},
+        {"type": "toggle", "label": "Измерение", "command_on": "start_measure", "command_off": "stop_measure"},
+        {"type": "button", "label": "°C / °F", "command": "set_unit_celsius"},
+        {"type": "slider", "label": "Верхний порог", "command": "set_upper_threshold", "min": -40, "max": 125, "unit": "°C"},
+        {"type": "slider", "label": "Нижний порог", "command": "set_lower_threshold", "min": -40, "max": 125, "unit": "°C"},
+        {"type": "toggle", "label": "Сигнализация", "command_on": "enable_alarm", "command_off": "disable_alarm"},
+        {"type": "battery_indicator", "label": "Батарея", "unit": "%"},
+        {"type": "rssi_indicator", "label": "Сигнал"},
+        {"type": "chart", "label": "График температуры", "sensor": "temperature", "history_minutes": 30}
+      ]
+    },
+    {
+      "device_id": "nrf_connect_emulator",
+      "device_name": "BLE-эмулятор (nRF Connect)",
+      "manufacturer": "Эмулятор",
+      "category": "emulator",
+      "icon": "emulator",
+      "description": "Виртуальное устройство для отладки",
+      "auto_detect": {
+        "service_uuids": ["0000fff0-0000-1000-8000-00805f9b34fb"],
+        "name_patterns": ["Lamp", "Emulator", "TestDevice"]
+      },
+      "connection": {
+        "service_uuid": "0000fff0-0000-1000-8000-00805f9b34fb",
+        "characteristic_uuid": "0000fff1-0000-1000-8000-00805f9b34fb",
+        "write_type": "WRITE_DEFAULT"
+      },
+      "commands": {
+        "power_on": {"name": "Включить", "bytes": [1]},
+        "power_off": {"name": "Выключить", "bytes": [0]},
+        "set_brightness": {"name": "Яркость", "bytes": [2, "VALUE"], "value_position": 1}
+      },
+      "ui_controls": [
+        {"type": "toggle", "label": "Питание", "command_on": "power_on", "command_off": "power_off"},
+        {"type": "slider", "label": "Яркость", "command": "set_brightness", "min": 0, "max": 100, "unit": "%"}
+      ]
+    },
+    {
+      "device_id": "generic_device",
+      "device_name": "Неизвестное устройство",
+      "manufacturer": "Универсальный",
+      "category": "unknown",
+      "icon": "default",
+      "description": "Универсальный профиль для неопознанных устройств",
+      "auto_detect": {},
+      "connection": {
+        "auto_discover": true
+      },
+      "commands": {},
+      "ui_controls": [
+        {"type": "display", "label": "Устройство подключено", "unit": ""},
+        {"type": "display", "label": "Функции ограничены", "unit": ""}
+      ]
+    }
+  ]
+}
